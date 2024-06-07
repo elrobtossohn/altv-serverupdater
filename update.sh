@@ -82,7 +82,7 @@ getFileHash() {
   sha1sum "$file" | awk '{print $1}'
 }
 fetchUpdateData() {
-  updateData=$(curl -s "https://cdn.altv.mp/server/$localBranch/x64_linux/update.json" -A 'AltPublicAgent')
+  updateData=$(curl -s "https://cdn.alt-mp.com/server/$localBranch/x64_linux/update.json" -A 'AltPublicAgent')
   echo $updateData | jq -e '.' >/dev/null 2>&1
   if [ $? -ne 0 ]; then
     printAndLog "Failed to check for update, try again later\n" 'ERR'
@@ -96,7 +96,7 @@ fetchUpdateData() {
   echo '{}' > ${updateTmp[0]}
   echo $updateData | jq -c "$(printf "$str" 'server')" > ${updateTmp[0]}
 
-  updateData=$(curl -s "https://cdn.altv.mp/data/$localBranch/update.json" -A 'AltPublicAgent')
+  updateData=$(curl -s "https://cdn.alt-mp.com/data/$localBranch/update.json" -A 'AltPublicAgent')
     if [ $? -ne 0 ]; then
     printAndLog "Failed to check for update, try again later\n" 'ERR'
     exit 1
@@ -112,7 +112,7 @@ fetchUpdateData() {
       modules[$i]='coreclr-module'
     fi
     local moduleName=${modules[$i]}
-    updateData=$(curl -s "https://cdn.altv.mp/$moduleName/$localBranch/x64_linux/update.json" -A 'AltPublicAgent')
+    updateData=$(curl -s "https://cdn.alt-mp.com/$moduleName/$localBranch/x64_linux/update.json" -A 'AltPublicAgent')
     echo $updateData | jq -e '.' >/dev/null 2>&1
     if [ $? -ne 0 ]; then
       printAndLog "Failed to check for $moduleName update\n" 'WARN'
@@ -212,7 +212,7 @@ downloadFiles() {
         mkdir -p "$outDir/"
       fi
 
-      wget "https://cdn.altv.mp/$dlType/$localBranch/$platform${file}?build=$localBuild" -U 'AltPublicAgent' -O "$file" -N -q && printAndLog 'done\n' 'APP' || printAndLog 'failed\n' 'APP'
+      wget "https://cdn.alt-mp.com/$dlType/$localBranch/$platform${file}?build=$localBuild" -U 'AltPublicAgent' -O "$file" -N -q && printAndLog 'done\n' 'APP' || printAndLog 'failed\n' 'APP'
       if [ ! -e "$file" ]; then
         continue
       fi

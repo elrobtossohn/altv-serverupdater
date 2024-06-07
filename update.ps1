@@ -60,9 +60,9 @@ function getFileHash($file) {
 function fetchUpdateData() {
   $hashTable=@{}
   try {
-    $script:updateData=(Invoke-RestMethod -Uri "https://cdn.altv.mp/server/$localBranch/x64_win32/update.json" -UserAgent "AltPublicAgent")
+    $script:updateData=(Invoke-RestMethod -Uri "https://cdn.alt-mp.com/server/$localBranch/x64_win32/update.json" -UserAgent "AltPublicAgent")
     $script:updateData.hashList.psobject.properties | %{ $hashTable[$_.Name]=@($_.Value, "server") }
-    $updateDataTmp=(Invoke-RestMethod -Uri "https://cdn.altv.mp/data/$localBranch/update.json" -UserAgent "AltPublicAgent")
+    $updateDataTmp=(Invoke-RestMethod -Uri "https://cdn.alt-mp.com/data/$localBranch/update.json" -UserAgent "AltPublicAgent")
     $updateDataTmp.hashList.psobject.properties | %{ $hashTable[$_.Name]=@($_.Value, "data") }
   } catch {
     printAndLog "Failed to check for update, try again later`n" "ERR"
@@ -71,7 +71,7 @@ function fetchUpdateData() {
   foreach($moduleName in $modules) {
     try {
       if($moduleName -eq "csharp-module") { $moduleName="coreclr-module" }
-      $updateData2=(Invoke-RestMethod -Uri "https://cdn.altv.mp/$moduleName/$localBranch/x64_win32/update.json" -UserAgent "AltPublicAgent")
+      $updateData2=(Invoke-RestMethod -Uri "https://cdn.alt-mp.com/$moduleName/$localBranch/x64_win32/update.json" -UserAgent "AltPublicAgent")
       $updateData2.hashList.psobject.properties | %{ $hashTable[$_.Name]=@($_.Value,"$moduleName") }
     } catch {
       printAndLog "Failed to check for $moduleName update`n" "WARN"
@@ -151,7 +151,7 @@ function downloadFiles() {
         New-Item -Path "$outDir" -ItemType "Directory" -Force >$null
       }
       $ProgressPreference="SilentlyContinue"
-      $result=(Invoke-WebRequest -Uri "https://cdn.altv.mp/$dlType/$localBranch$platform/${file}?build=$localBuild" -UserAgent "AltPublicAgent" -UseBasicParsing -OutFile "$file" -PassThru)
+      $result=(Invoke-WebRequest -Uri "https://cdn.alt-mp.com/$dlType/$localBranch$platform/${file}?build=$localBuild" -UserAgent "AltPublicAgent" -UseBasicParsing -OutFile "$file" -PassThru)
       $ProgressPreference="Continue"
       if($result.StatusCode -eq 200) {
         printAndLog "done`n" "APP"
